@@ -43,11 +43,11 @@ class Monitor():
                 client = Client(key, secret)
             except Exception as err: # pylint: disable=broad-except
                 if attempts > 10:
-                    start = key[:8]
-                    self.__log.warning("Cannot connect to Client starting with %s. Retrying ...", start)
+                    msg = f"Cannot connect to client (key={key[:8]}): {err}. Retrying ..."
+                    self.__log.warning(msg)
                 time.sleep(5) # Sleep for 5 seconds and try again
             else:
-                # Leave loop if we initialized Client without errors
+                # Leave loop if we initialized client without errors
                 break
         return client
 
