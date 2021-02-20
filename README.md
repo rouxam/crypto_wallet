@@ -1,2 +1,2 @@
-# wallet_monitor
+# Crypto Wallet
 Monitor all Binance accounts
