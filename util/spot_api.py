@@ -14,7 +14,7 @@ class Spot_Api():
         try:
             return self.__client.get_all_tickers()
         except Exception as err: # pylint: disable=broad-except
-            err_msg = f"`get_all_tickers()` failed: {str(err)}"
+            err_msg = f"`get_all_tickers()` failed: {err}"
             self.__log.warning(err_msg)
             return {}
 
@@ -30,7 +30,7 @@ class Spot_Api():
         try:
             return self.__client.get_account()
         except Exception as err: # pylint: disable=broad-except
-            err_msg = f"`get_account()` failed: {str(err)}"
+            err_msg = f"`get_account()` failed: {err}"
             self.__log.warning(err_msg)
             return {}
 
@@ -72,7 +72,7 @@ class Spot_Api():
         try:
             _ = self.__client.order_market_buy(symbol=symbol, quantity=quantity)
         except Exception as err: # pylint: disable=broad-except
-            err_msg = f"`order_market_buy()` failed: {str(err)}"
+            err_msg = f"`order_market_buy()` failed: {err}"
             self.__log.warning(err_msg)
 
     def order_market_sell(self, symbol, quantity):
@@ -82,5 +82,5 @@ class Spot_Api():
         try:
             _ = self.__client.order_market_sell(symbol=symbol, quantity=quantity)
         except Exception as err: # pylint: disable=broad-except
-            err_msg = f"`order_market_sell()` failed: {str(err)}"
+            err_msg = f"`order_market_sell()` failed: {err}"
             self.__log.warning(err_msg)

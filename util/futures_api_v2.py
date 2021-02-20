@@ -12,7 +12,7 @@ def positions(client):
     try:
         pos_info = client.futures_position_information()
     except Exception as err: # pylint: disable=broad-except
-        err_msg = f"`futures_position_information()` failed: {str(err)}"
+        err_msg = f"`futures_position_information()` failed: {err}"
         Log.warning(err_msg)
         return None
 
@@ -28,7 +28,7 @@ def positions(client):
 #     try:
 #         return client.futures_get_all_orders()
 #     except Exception as err: # pylint: disable=broad-except
-#         err_msg = f"`futures_get_all_orders()` failed: {str(err)}"
+#         err_msg = f"`futures_get_all_orders()` failed: {err}"
 #         Log.warning(err_msg)
 #         return {}
 
@@ -38,7 +38,7 @@ def create_order(client, **order):
     try:
         _ = client.futures_create_order(**order)
     except Exception as err: # pylint: disable=broad-except
-        err_msg = f"`futures_create_order()` failed: {str(err)}"
+        err_msg = f"`futures_create_order()` failed: {err}"
         Log.warning(err_msg)
 
 def get_account(client):
@@ -51,6 +51,6 @@ def get_account(client):
             # No futures account
             pass
         else:
-            err_msg = f"`futures_account()` failed: {str(err)}"
+            err_msg = f"`get_account()` failed: {err}"
             Log.warning(err_msg)
         return None
