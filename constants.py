@@ -12,16 +12,16 @@ ACCOUNTS = {
         "secret": os.getenv("MASTER_SECRET")
     },
     "3c_master": {
-        "key": os.getenv("3C_MASTER_KEY"),
-        "secret": os.getenv("3C_MASTER_SECRET")
+        "key": os.getenv("MASTER_3C_KEY"),
+        "secret": os.getenv("MASTER_3C_SECRET")
     },
     "3c_btc": {
-        "key": os.getenv("3C_BTC_KEY"),
-        "secret": os.getenv("3C_BTC_SECRET")
+        "key": os.getenv("BTC_3C_KEY"),
+        "secret": os.getenv("BTC_3C_SECRET")
     },
     "3c_eth": {
-        "key": os.getenv("3C_ETH_KEY"),
-        "secret": os.getenv("3C_ETH_SECRET")
+        "key": os.getenv("ETH_3C_KEY"),
+        "secret": os.getenv("ETH_3C_SECRET")
     }
 }
 
