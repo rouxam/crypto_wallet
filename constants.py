@@ -30,7 +30,7 @@ ACCOUNTS = {
 if 'win' in sys.platform:
     ROOT = Path(__file__).parent
 else:
-    ROOT = "/usr/bin/wallet_monitor"
+    ROOT = "/usr/bin/crypto_wallet"
 
 CFG_PATH = ROOT / Path("cfg.json")
 LAST_TICK_PATH = ROOT / Path("last_tick.json")
