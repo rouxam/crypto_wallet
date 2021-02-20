@@ -35,6 +35,22 @@ class Monitor():
         self.__log.info("Initializing on %s with cfg: %s", hostname, str(cfg))
         self.__log.info("Succesfully initialized on %s", hostname)
 
+    def get_client(self, key, secret):
+        attempts = 0
+        while True:
+            attempts += 1
+            try:
+                client = Client(key, secret)
+            except Exception as err: # pylint: disable=broad-except
+                if attempts > 10:
+                    start = key[:8]
+                    self.__log.warning("Cannot connect to Client starting with %s. Retrying ...", start)
+                time.sleep(5) # Sleep for 5 seconds and try again
+            else:
+                # Leave loop if we initialized Client without errors
+                break
+        return client
+
     def save_last_tick(self, cfg):
 
         limit_seconds = 10 * float(cfg.get("sleep_time"))
@@ -76,9 +92,7 @@ class Monitor():
         tickers = None
         total_portfolio = 0
         for account_name, api in ACCOUNTS.items():
-            key = api["key"]
-            secret = api["secret"]
-            client = Client(key, secret)
+            client = self.get_client(api["key"], api["secret"])
 
             # Spot
             spot_api = Spot_Api(client)
