@@ -148,6 +148,12 @@ class Monitor():
         file_.write(json.dumps(json_data))
         file_.close()
 
+        # "Sexy" print for Telegram logger:
+        msg = ""
+        for key, val in new_dict.items():
+            msg += f"{key}: {val}\n"
+        self.__log.info(msg)
+
 def main():
     "Run the bot."
 
