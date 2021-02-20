@@ -18,6 +18,14 @@ class Spot_Api():
             self.__log.warning(err_msg)
             return {}
 
+    def get_price(self, symbol, tickers=None):
+        if tickers is None:
+            tickers = self.get_all_tickers()
+        for ticker in tickers:
+            if ticker["symbol"] == symbol:
+                return float(ticker["price"])
+        return None
+
     def get_account(self):
         try:
             return self.__client.get_account()

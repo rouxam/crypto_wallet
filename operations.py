@@ -10,7 +10,7 @@ from util.read_json import read_json
 from util.pretty_now import pretty_datetime_now, MY_DATE_STYLE
 
 
-def _get_price(tickers, symbol):
+def get_price(tickers, symbol):
     for ticker in tickers:
         if ticker["symbol"] == symbol:
             return float(ticker["price"])
@@ -27,9 +27,9 @@ def get_futures_positions():
         key = api["key"]
         secret = api["secret"]
         client = binance_client(key, secret)
-        if futures_api.get_account(client):
-            positions = futures_api.positions(client)
-            acc = futures_api.get_account(client)
+        if futures_api_v2.get_account(client):
+            positions = futures_api_v2.positions(client)
+            acc = futures_api_v2.get_account(client)
             usdt_pos = next(a for a in acc["assets"] if a["asset"] == "USDT")
             ret += "*************\n" + \
                 f"Futures positions on {account_name} (USDT Available: " + \
@@ -50,7 +50,7 @@ def totals(account, tickers):
         return ({}, {})
 
     # Price Tickers
-    btcusdt_price = _get_price(tickers, "BTCUSDT")
+    btcusdt_price = get_price(tickers, "BTCUSDT")
 
     spot_quantities = {}
     spot_usdt_balances = {}
@@ -66,11 +66,11 @@ def totals(account, tickers):
                     spot_usdt_balances[asset] = qty
                 else:
                     # Determine USDT value
-                    price = _get_price(tickers, asset + "USDT")
+                    price = get_price(tickers, asset + "USDT")
                     if price:
                         spot_usdt_balances[asset] = qty * price
                     else:
-                        btc_price = _get_price(tickers, symbol=asset + "BTC")
+                        btc_price = get_price(tickers, symbol=asset + "BTC")
                         if btc_price:
                             spot_usdt_balances[asset] = qty * btc_price * btcusdt_price
                         else:
@@ -100,7 +100,7 @@ def get_wallet():
         total_portfolio += total_spot_balance
 
         # Futures
-        futures_account = futures_api.get_account(client)
+        futures_account = futures_api_v2.get_account(client)
         if futures_account:
             total_portfolio += float(futures_account['totalMarginBalance'])
 

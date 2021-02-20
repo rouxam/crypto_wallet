@@ -57,13 +57,12 @@ class Monitor():
 
     def save_portfolio(self, cfg):
         "Save portfolio value in JSON every now and then."
-        print("saving portfolio")
         # Save portfolio value every 3 hours
         limit_hours = cfg.get("save_every_hours", 6)
 
         json_data = read_json(PORTFOLIO_HIST_PATH)
         if not json_data:
-            print("no data")
+            self.__log.info("Could not open portfolio json !")
             return
 
         if "time" in json_data[-1]:
@@ -73,12 +72,10 @@ class Monitor():
             if delta < timedelta(hours=limit_hours):
                 return
 
-        print("saving portfolio beta")
         wallet_by_account = {}
         tickers = None
         total_portfolio = 0
         for account_name, api in ACCOUNTS.items():
-            print("saving portfolio charly")
             key = api["key"]
             secret = api["secret"]
             client = Client(key, secret)
@@ -97,18 +94,39 @@ class Monitor():
             else:
                 total_futures = 0
 
+            quote = "USDT"
+            quote_to_usdt = 1.0
+
+            if "BTC" in account_name.upper():
+                quote = "BTC"
+                tickers = spot_api.get_all_tickers()
+                quote_to_usdt = spot_api.get_price("BTCUSDT")
+            elif "ETH" in account_name.upper():
+                quote = "ETH"
+                tickers = spot_api.get_all_tickers()
+                quote_to_usdt = spot_api.get_price("ETHUSDT")
+
+            total_account = total_spot + total_futures
+            total_account_in_quote = total_account / quote_to_usdt
+
             # Wallet Total for this Account
             wallet_by_account[account_name] = {
-                "spot": format(total_spot, '.2f'),
-                "futures": format(total_futures, '.2f')
+                "spot_USDT": format(total_spot, '.2f'),
+                "futures_USDT": format(total_futures, '.2f'),
+                "total_USDT": format(total_account, '.2f')
             }
 
-            total_portfolio += total_spot + total_futures
+            if quote != "USDT":
+                wallet_by_account[account_name].update({
+                    f"total_{quote}": format(total_account_in_quote, '.5f')
+                })
+
+            total_portfolio += total_account
 
         new_dict = {
             "time": pretty_datetime_now(),
             "total_by_account": wallet_by_account,
-            "total": total_portfolio
+            "total": format(total_portfolio, '.2f')
         }
 
         json_data.append(new_dict)
