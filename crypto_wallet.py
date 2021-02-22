@@ -74,7 +74,7 @@ class Monitor():
     def save_portfolio(self, cfg):
         "Save portfolio value in JSON every now and then."
         # Save portfolio value every 3 hours
-        limit_hours = cfg.get("save_every_hours", 6)
+        limit_mn = cfg.get("save_every_minutes", 20)
 
         json_data = read_json(PORTFOLIO_HIST_PATH)
         if not json_data:
@@ -85,7 +85,7 @@ class Monitor():
             last_save = datetime.strptime(json_data[-1]["time"], MY_DATE_STYLE)
 
             delta = datetime.now() - last_save
-            if delta < timedelta(hours=limit_hours):
+            if delta < timedelta(minutes=limit_mn):
                 return
 
         wallet_by_account = {}
