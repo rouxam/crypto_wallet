@@ -153,7 +153,13 @@ class Monitor():
         # "Sexy" print for Telegram logger:
         msg = ""
         for key, val in new_dict.items():
-            msg += f"{key}: {val}\n"
+            if isinstance(val, dict):
+                val_1 = ""
+                for k, v in val.items():
+                    val_1 += f"{k}: {v}\n"
+            else:
+                val_1 = val
+            msg += f"{key}: {val_1}\n"
         self.__log.info(msg)
 
 def main():
