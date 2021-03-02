@@ -124,13 +124,15 @@ class Monitor():
             total_account_in_quote = total_account / quote_to_usdt
 
             # Wallet Total for this Account
-            wallet_by_account[account_name] = {
-                "spot_USDT": format(total_spot, '.2f'),
-                "futures_USDT": format(total_futures, '.2f'),
-                "total_USDT": format(total_account, '.2f')
-            }
+            d = {"total_USDT": format(total_account, '.2f')}
+            if total_spot > 0.0:
+                d.update({"spot_USDT": format(total_spot, '.2f')})
+            if total_futures > 0.0:
+                d.update({"futures_USDT": format(total_futures, '.2f')})
 
-            if quote != "USDT":
+            wallet_by_account[account_name] = d
+
+            if quote != "USDT" and total_account_in_quote > 0.0:
                 wallet_by_account[account_name].update({
                     f"total_{quote}": format(total_account_in_quote, '.5f')
                 })
