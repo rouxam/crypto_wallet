@@ -91,7 +91,7 @@ class Monitor():
         wallet_by_account = {}
         tickers = None
         total_portfolio = 0
-        btcusdt_price = 0
+        btcusdt_price = -1
 
         for account_name, api in ACCOUNTS.items():
             client = self.get_client(api["key"], api["secret"])
@@ -110,7 +110,7 @@ class Monitor():
             else:
                 total_futures = 0
 
-            if btcusdt_price == 0:
+            if btcusdt_price == -1:
                 tickers = spot_api.get_all_tickers()
                 btcusdt_price = spot_api.get_price("BTCUSDT")
 
@@ -145,10 +145,10 @@ class Monitor():
             total_portfolio += total_account
 
         new_dict = {
+            "Total": f"{total_portfolio:.0f} USDT = {total_portfolio/btcusdt_price:.5f} BTC",
+            "BTC/USDT":  f"{btcusdt_price:.0f} USDT",
             "time": pretty_datetime_now(),
             "total_by_account": wallet_by_account,
-            "total": f"{total_portfolio:.0f} USDT",
-            "BTC/USDT":  f"{btcusdt_price:.0f} USDT",
         }
 
         json_data.append(new_dict)
@@ -157,7 +157,7 @@ class Monitor():
         file_.close()
 
         # "Sexy" print for Telegram logger:
-        msg = f"Total: {total_portfolio:.2f} USDT\n"
+        msg = f""
         for key, val in new_dict.items():
             if isinstance(val, dict):
                 val_1 = ""
