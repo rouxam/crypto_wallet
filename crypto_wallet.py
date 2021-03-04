@@ -151,7 +151,7 @@ class Monitor():
         file_.close()
 
         # "Sexy" print for Telegram logger:
-        msg = ""
+        msg = f"Total: {total_portfolio:.2f)} USDT\n"
         for key, val in new_dict.items():
             if isinstance(val, dict):
                 val_1 = ""

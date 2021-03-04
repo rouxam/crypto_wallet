@@ -18,7 +18,7 @@ class TelegramFormatter(logging.Formatter):
                 traceback.format_exception(*record.exc_info))
         else:
             exc_msg = ""
-        msg = record.module + ": " + (record.msg % record.args) + exc_msg
+        msg = (record.msg % record.args) + exc_msg
         return msg
 
 class TerminalFormatter(logging.Formatter):
