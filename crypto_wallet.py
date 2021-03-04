@@ -91,6 +91,8 @@ class Monitor():
         wallet_by_account = {}
         tickers = None
         total_portfolio = 0
+        btcusdt_price = 0
+
         for account_name, api in ACCOUNTS.items():
             client = self.get_client(api["key"], api["secret"])
 
@@ -108,13 +110,16 @@ class Monitor():
             else:
                 total_futures = 0
 
+            if btcusdt_price == 0:
+                tickers = spot_api.get_all_tickers()
+                btcusdt_price = spot_api.get_price("BTCUSDT")
+
             quote = "USDT"
             quote_to_usdt = 1.0
 
             if "BTC" in account_name.upper():
                 quote = "BTC"
-                tickers = spot_api.get_all_tickers()
-                quote_to_usdt = spot_api.get_price("BTCUSDT")
+                quote_to_usdt = btcusdt_price
             elif "ETH" in account_name.upper():
                 quote = "ETH"
                 tickers = spot_api.get_all_tickers()
@@ -124,25 +129,26 @@ class Monitor():
             total_account_in_quote = total_account / quote_to_usdt
 
             # Wallet Total for this Account
-            d = {"total_USDT": format(total_account, '.2f')}
+            d = {"total_USDT": f"{total_account:.2f}"}
             if total_spot > 0.0:
-                d.update({"spot_USDT": format(total_spot, '.2f')})
+                d.update({"spot_USDT": f"{total_spot:.2f}"})
             if total_futures > 0.0:
-                d.update({"futures_USDT": format(total_futures, '.2f')})
+                d.update({"futures_USDT": f"{total_futures:.2f}"})
 
             wallet_by_account[account_name] = d
 
             if quote != "USDT" and total_account_in_quote > 0.0:
-                wallet_by_account[account_name].update({
-                    f"total_{quote}": format(total_account_in_quote, '.5f')
-                })
+                wallet_by_account[account_name].update(
+                    {f"total_{quote}": f"{total_account_in_quote:.5f}"}
+                )
 
             total_portfolio += total_account
 
         new_dict = {
             "time": pretty_datetime_now(),
             "total_by_account": wallet_by_account,
-            "total": format(total_portfolio, '.2f')
+            "total": f"{total_portfolio:.0f} USDT",
+            "BTC/USDT":  f"{btcusdt_price:.0f} USDT",
         }
 
         json_data.append(new_dict)
@@ -151,7 +157,7 @@ class Monitor():
         file_.close()
 
         # "Sexy" print for Telegram logger:
-        msg = f"Total: {total_portfolio:.2f)} USDT\n"
+        msg = f"Total: {total_portfolio:.2f} USDT\n"
         for key, val in new_dict.items():
             if isinstance(val, dict):
                 val_1 = ""
