@@ -129,11 +129,11 @@ class Monitor():
             total_account_in_quote = total_account / quote_to_usdt
 
             # Wallet Total for this Account
-            d = {"total_USDT": f"{total_account:.2f}"}
+            d = {"total": f"{total_account:.2f}"}
             if total_spot > 0.0:
-                d.update({"spot_USDT": f"{total_spot:.2f}"})
+                d.update({"spot": f"{total_spot:.2f}"})
             if total_futures > 0.0:
-                d.update({"futures_USDT": f"{total_futures:.2f}"})
+                d.update({"futures": f"{total_futures:.2f}"})
 
             wallet_by_account[account_name] = d
 
@@ -162,7 +162,13 @@ class Monitor():
             if isinstance(val, dict):
                 val_1 = ""
                 for k, v in val.items():
-                    val_1 += f"{k}: {v}\n"
+                    if isinstance(v, dict):
+                        val_2 = ""
+                        for k2, v2 in v.items():
+                            val_2 += f"{k2}: {v2}\n"
+                    else:
+                        val_2 = val
+                    val_1 += f"{k}: {val_2}\n"
             else:
                 val_1 = val
             msg += f"{key}: {val_1}\n"
