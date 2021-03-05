@@ -148,7 +148,7 @@ class Monitor():
             "Total": f"{total_portfolio:.0f} USDT = {total_portfolio/btcusdt_price:.5f} BTC",
             "BTC/USDT":  f"{btcusdt_price:.0f} USDT",
             "time": pretty_datetime_now(),
-            "total_by_account": wallet_by_account,
+            "total by account": wallet_by_account,
         }
 
         json_data.append(new_dict)
