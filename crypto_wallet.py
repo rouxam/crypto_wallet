@@ -141,7 +141,7 @@ class Monitor():
             if key == "details":
                 val_1 = "\n"
                 for key_, val_ in val.items():
-                    val_1 += f"{key_}: {val_}"
+                    val_1 += f"{key_}: {val_}\n"
             else:
                 val_1 = val
             msg += f"{key}: {val_1}\n"
