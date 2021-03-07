@@ -9,23 +9,33 @@ TELEGRAM_CRYPTO_WALLET_TOKEN = os.getenv("TELEGRAM_CRYPTO_WALLET_TOKEN")
 ACCOUNTS = {
     "MASTER": {
         "key": os.getenv("MASTER_KEY"),
-        "secret": os.getenv("MASTER_SECRET")
+        "secret": os.getenv("MASTER_SECRET"),
+        "market":"spot"
     },
-    "3c MASTER": {
+    "DCA bots": {
         "key": os.getenv("MASTER_3C_KEY"),
-        "secret": os.getenv("MASTER_3C_SECRET")
+        "secret": os.getenv("MASTER_3C_SECRET"),
+        "market": "spot"
     },
-    "3c BTC ETH HODL": {
+    "Futures": {
+        "key": os.getenv("MASTER_3C_KEY"),
+        "secret": os.getenv("MASTER_3C_SECRET"),
+        "market": "futures"
+    },
+    "BTC ETH HODL": {
         "key": os.getenv("BTC_3C_KEY"),
-        "secret": os.getenv("BTC_3C_SECRET")
+        "secret": os.getenv("BTC_3C_SECRET"),
+        "market": "spot"
     },
-    "3c ALT HODL": {
+    "Altcoins HODL": {
         "key": os.getenv("ETH_3C_KEY"),
-        "secret": os.getenv("ETH_3C_SECRET")
+        "secret": os.getenv("ETH_3C_SECRET"),
+        "market": "spot"
     },
-    "3c LEVERAGE": {
+    "Leveraged tokens": {
         "key": os.getenv("BLVT_3C_KEY"),
-        "secret": os.getenv("BLVT_3C_SECRET")
+        "secret": os.getenv("BLVT_3C_SECRET"),
+        "market": "spot"
     }
 }
 

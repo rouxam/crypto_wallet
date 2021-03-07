@@ -95,60 +95,39 @@ class Monitor():
 
         for account_name, api in ACCOUNTS.items():
             client = self.get_client(api["key"], api["secret"])
+            market = api["market"]
 
             # Spot
-            spot_api = Spot_Api(client)
-            spot_account = spot_api.get_account()
-            tickers = spot_api.get_all_tickers() if not tickers else tickers
-            _, spot_usdt_balances = totals(spot_account, tickers)
-            total_spot = sum(spot_usdt_balances.values())
+            if market == "spot":
+                spot_api = Spot_Api(client)
+                spot_account = spot_api.get_account()
+                tickers = spot_api.get_all_tickers() if not tickers else tickers
+                _, spot_usdt_balances = totals(spot_account, tickers)
+                total_account = sum(spot_usdt_balances.values())
 
             # Futures
-            futures_account = futures_api_v2.get_account(client)
-            if futures_account:
-                total_futures = float(futures_account['totalMarginBalance'])
-            else:
-                total_futures = 0
+            elif market == "futures":
+                futures_account = futures_api_v2.get_account(client)
+                if futures_account:
+                    total_account = float(futures_account['totalMarginBalance'])
+                else:
+                    total_account = 0
 
             if btcusdt_price == -1:
                 tickers = spot_api.get_all_tickers()
                 btcusdt_price = spot_api.get_price("BTCUSDT")
 
-            quote = "USDT"
-            quote_to_usdt = 1.0
-
-            if "BTC" in account_name.upper():
-                quote = "BTC"
-                quote_to_usdt = btcusdt_price
-            elif "ETH" in account_name.upper():
-                quote = "ETH"
-                tickers = spot_api.get_all_tickers()
-                quote_to_usdt = spot_api.get_price("ETHUSDT")
-
-            total_account = total_spot + total_futures
-            total_account_in_quote = total_account / quote_to_usdt
+            total_account_btc = total_account / btcusdt_price
 
             # Wallet Total for this Account
-            d = {"total": f"{total_account:.2f}"}
-            if total_spot > 0.0:
-                d.update({"spot": f"{total_spot:.2f}"})
-            if total_futures > 0.0:
-                d.update({"futures": f"{total_futures:.2f}"})
-
-            wallet_by_account[account_name] = d
-
-            if quote != "USDT" and total_account_in_quote > 0.0:
-                wallet_by_account[account_name].update(
-                    {f"total_{quote}": f"{total_account_in_quote:.5f}"}
-                )
-
+            wallet_by_account[account_name] = f"{total_account:.0f} USDT = {total_account_btc:.5f} BTC"
             total_portfolio += total_account
 
         new_dict = {
             "Total": f"{total_portfolio:.0f} USDT = {total_portfolio/btcusdt_price:.5f} BTC",
             "BTC/USDT":  f"{btcusdt_price:.0f} USDT",
             "time": pretty_datetime_now(),
-            "total by account": wallet_by_account,
+            "details": wallet_by_account,
         }
 
         json_data.append(new_dict)
@@ -159,16 +138,10 @@ class Monitor():
         # "Sexy" print for Telegram logger:
         msg = f""
         for key, val in new_dict.items():
-            if isinstance(val, dict):
-                val_1 = ""
-                for k, v in val.items():
-                    if isinstance(v, dict):
-                        val_2 = ""
-                        for k2, v2 in v.items():
-                            val_2 += f"{k2}: {v2}\n"
-                    else:
-                        val_2 = val
-                    val_1 += f"{k}: {val_2}\n"
+            if val == "details":
+                val_1 = "\n"
+                for key_, val_ in val.items():
+                    val_1 = f"{key_}: {val_}"
             else:
                 val_1 = val
             msg += f"{key}: {val_1}\n"
