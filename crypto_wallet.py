@@ -139,12 +139,11 @@ class Monitor():
         msg = f""
         for key, val in new_dict.items():
             if key == "details":
-                val_1 = "\n"
-                for key_, val_ in val.items():
-                    val_1 += f"{key_}: {val_}\n"
+                msg += "\n"
+                for key2, val2 in val.items():
+                    msg += f"{key2}: {val2}\n"
             else:
-                val_1 = val
-            msg += f"{key}: {val_1}\n"
+                msg += f"{key}: {val}\n"
         self.__log.info(msg)
 
 def main():
