@@ -12,9 +12,14 @@ ACCOUNTS = {
         "secret": os.getenv("MASTER_SECRET"),
         "market":"spot"
     },
-    "DCA bots": {
+    "USDT DCA bots": {
         "key": os.getenv("MASTER_3C_KEY"),
         "secret": os.getenv("MASTER_3C_SECRET"),
+        "market": "spot"
+    },
+    "BTC DCA bots": {
+        "key": os.getenv("BTC_DCA_3C_KEY"),
+        "secret": os.getenv("BTC_DCA_3C_SECRET"),
         "market": "spot"
     },
     "Futures": {
