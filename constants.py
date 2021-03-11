@@ -22,15 +22,15 @@ ACCOUNTS = {
         "secret": os.getenv("BTC_DCA_3C_SECRET"),
         "market": "spot"
     },
-    "Futures": {
+    "Manual Futures": {
         "key": os.getenv("MASTER_3C_KEY"),
         "secret": os.getenv("MASTER_3C_SECRET"),
         "market": "futures"
     },
-    "BTC ETH HODL": {
-        "key": os.getenv("BTC_3C_KEY"),
-        "secret": os.getenv("BTC_3C_SECRET"),
-        "market": "spot"
+    "AltSignals": {
+        "key": os.getenv("ALTSIGNALS_KEY"),
+        "secret": os.getenv("ALTSIGNALS_SECRET"),
+        "market": "futures"
     },
     "Altcoins HODL": {
         "key": os.getenv("ETH_3C_KEY"),
