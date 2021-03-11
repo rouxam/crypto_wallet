@@ -36,11 +36,6 @@ ACCOUNTS = {
         "key": os.getenv("ETH_3C_KEY"),
         "secret": os.getenv("ETH_3C_SECRET"),
         "market": "spot"
-    },
-    "Leveraged tokens": {
-        "key": os.getenv("BLVT_3C_KEY"),
-        "secret": os.getenv("BLVT_3C_SECRET"),
-        "market": "spot"
     }
 }
 
