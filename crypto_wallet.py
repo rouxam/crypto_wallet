@@ -12,6 +12,7 @@ from constants import *
 from operations import totals
 from util.spot_api import Spot_Api
 from util import futures_api_v2
+from util import futures_coin_api
 from util.read_json import read_json
 from util.pretty_now import pretty_datetime_now, MY_DATE_STYLE
 from logger import TelegramNormalHandler, TerminalHandler
@@ -105,9 +106,17 @@ class Monitor():
                 _, spot_usdt_balances = totals(spot_account, tickers)
                 total_account = sum(spot_usdt_balances.values())
 
-            # Futures
+            # USDT Futures
             elif market == "futures":
                 futures_account = futures_api_v2.get_account(client)
+                if futures_account:
+                    total_account = float(futures_account['totalMarginBalance'])
+                else:
+                    total_account = 0
+
+            # COIN-M Futures
+            elif market == "futures_coin":
+                futures_account = futures_coin_api.get_account(client)
                 if futures_account:
                     total_account = float(futures_account['totalMarginBalance'])
                 else:
