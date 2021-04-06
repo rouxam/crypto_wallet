@@ -34,6 +34,7 @@ def create_order(client, **order):
 def get_account(client):
     "Create order on Futures account from `client`."
     assert isinstance(client, Client)
+    print(dir(client))
     client.futures_coin_ping()
     try:
         return client.futures_coin_account()
